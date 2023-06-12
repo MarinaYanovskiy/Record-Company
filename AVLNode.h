@@ -16,16 +16,22 @@ public:
     ~Node();
     void insert(K key, D data);
     D find(K key) const;
+    int sum_extras(K key) const;
+    void add_extra(int value, K key); // add to extra from leftmost to key
+    void resetExtra();
+    void setExtra(int val);
     void remove(K key);
     void print(std::string prefix, bool isLeft);
     bool isLeaf() const;
     void inOrderArray(D* array, int index) const;
     int size() const;
     D largest() const;
+    Node<K, D>* findNode(K key);
 
 private:
     K m_key;
     D m_data;
+    int m_extra;
     int m_height;
     Node* m_left;
     Node* m_right;
@@ -43,6 +49,7 @@ template <class K, class D>
 Node<K, D>::Node(K key, D data)
     : m_key(key)
     , m_data(data)
+    , m_extra(0)
     , m_height(1)
     , m_left(nullptr)
     , m_right(nullptr)
@@ -108,11 +115,21 @@ template <class K, class D>
 void Node<K, D>::rRotate()
 {
     Node<K, D>* left = this->m_left;
+
+    left->m_extra += this->m_extra;
+    this->m_extra = -this->m_extra;
+
     this->m_left = left->m_right;
     this->updateHeight();
     left->m_right = new Node<K, D>(*this);
     left->updateHeight();
     *this = *left;
+
+    // restore correctness of m_extra
+    // this->m_extra += left->m_right->m_extra;
+    // this->m_right->m_extra = -this->m_right->m_extra;
+
+    // delete left
     left->m_right = nullptr;
     left->m_left = nullptr;
     delete left;
@@ -122,15 +139,27 @@ template <class K, class D>
 void Node<K, D>::lRotate()
 {
     Node<K, D>* right = this->m_right;
+
+    right->m_extra += this->m_extra;
+    this->m_extra = -this->m_extra;
+
     this->m_right = right->m_left;
     this->updateHeight();
     right->m_left = new Node<K, D>(*this);
     right->updateHeight();
     *this = *right;
+
+    // restore correctness of m_extra
+    //
+    // this->m_extra += right->m_left->m_extra;
+    // this->m_left->m_extra = -this->m_left->m_extra;
+
+    // delete right
     right->m_right = nullptr;
     right->m_left = nullptr;
     delete right;
 }
+
 
 template <class K, class D>
 void Node<K, D>::insert(K key, D data)
@@ -280,7 +309,7 @@ void Node<K, D>::print(std::string prefix, bool isLeft)
 {
     std::cout << prefix;
     std::cout << (isLeft ? "├──" : "└──");
-    std::cout << this->m_key << std::endl;
+    std::cout << "(" << this->m_key << ", " << this->m_extra << ")" << std::endl;
     if (this->m_left) {
         this->m_left->print(prefix + (isLeft ? "│   " : "    "), true);
     }
@@ -332,7 +361,129 @@ D Node<K, D>::largest() const
     while (node->m_right != nullptr) {
         node = node->m_right;
     }
-    
+
     return node->m_data;
 }
+
+template <class K, class D>
+int Node<K, D>::sum_extras(K key) const
+{
+    if (this->m_key == key) {
+        return this->m_extra;
+    }
+
+    if (key > this->m_key) {
+        if (this->m_right) {
+            return this->m_extra + this->m_right->sum_extras(key);
+        }
+        return this->m_extra;
+    }
+
+    if (key < this->m_key) {
+        if (this->m_left) {
+            return this->m_extra + this->m_left->sum_extras(key);
+        }
+        return this->m_extra;
+    }
+
+    return 0;
+}
+
+template <class K, class D>
+void Node<K, D>::add_extra(int value, K key)
+{
+    bool went_right = false;
+    Node<K, D>* current = this;
+    while (current->isLeaf() == false) {
+        if (key == current->m_key) {
+            if (went_right == false) {
+                current->m_extra += value;
+            }
+
+            if (current->m_right) {
+                current->m_right->m_extra -= value;
+            }
+
+            return;
+        }
+
+        if (key > current->m_key) {
+            if (went_right == false) {
+                current->m_extra += value;
+            }
+
+            if (current->m_right == nullptr) {
+                return;
+            }
+
+            current = current->m_right;
+            went_right = true;
+            continue;
+        }
+
+        if (key < current->m_key) {
+            if (went_right == true) {
+                current->m_extra -= value;
+            }
+
+            if (current->m_left == nullptr) {
+                return;
+            }
+
+            current = current->m_left;
+            went_right = false;
+            continue;
+        }
+    }
+
+    if (current->isLeaf() && went_right == false) {
+        if (key >= current->m_key) {
+            current->m_extra += value;
+        }
+    }
+}
+
+template <class K, class D>
+void Node<K, D>::resetExtra()
+{
+    this->m_extra = 0;
+    if (this->m_right) {
+        this->m_right->resetExtra();
+    }
+
+    if (this->m_left) {
+        this->m_left->resetExtra();
+    }
+}
+
+template <class K, class D>
+void Node<K, D>::setExtra(int val)
+{
+    this->m_extra = val;
+}
+
+template <class K, class D>
+Node<K, D>* Node<K, D>::findNode(K key)
+{
+    if (this->m_key == key) {
+        return this;
+    }
+
+    if (key > this->m_key) {
+        if (this->m_right) {
+            return this->m_right->findNode(key);
+        }
+        return nullptr;
+    }
+
+    if (key < this->m_key) {
+        if (this->m_left) {
+            return this->m_left->findNode(key);
+        }
+        return nullptr;
+    }
+
+    return nullptr;
+}
+
 #endif

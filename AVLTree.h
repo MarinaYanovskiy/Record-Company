@@ -15,6 +15,9 @@ public:
     void print() const;
     D* test() const;
     D largest() const;
+    void add_extra(int value, K key); // add to extra from leftmost to key
+    void resetExtra();
+    int sum_extras(K key) const;
 
     class ReverseInorderIterator {
     public:
@@ -111,6 +114,9 @@ void AVLTree<K, D>::insert(K key, D data)
     }
 
     this->m_root->insert(key, data);
+    Node<K, D>* inserted = this->m_root->findNode(key);
+    int val = this->m_root->sum_extras(key);
+    inserted->setExtra(-val);
 }
 
 template <class K, class D>
@@ -148,7 +154,7 @@ void AVLTree<K, D>::print() const
 }
 
 template <class K, class D>
-D AVLTree<K, D>::largest() const 
+D AVLTree<K, D>::largest() const
 {
     if (this->m_root == nullptr) {
         return nullptr;
@@ -156,4 +162,31 @@ D AVLTree<K, D>::largest() const
 
     return this->m_root->largest();
 }
+
+template <class K, class D>
+void AVLTree<K, D>::add_extra(int value, K key)
+{
+    if (this->m_root) {
+        this->m_root->add_extra(value, key);
+    }
+}
+
+template <class K, class D>
+void AVLTree<K, D>::resetExtra()
+{
+    if (this->m_root) {
+        this->m_root->resetExtra();
+    }
+}
+
+template <class K, class D>
+int AVLTree<K, D>::sum_extras(K key) const
+{
+    if (this->m_root) {
+        return this->m_root->sum_extras(key);
+    }
+
+    return 0;
+}
+
 #endif
