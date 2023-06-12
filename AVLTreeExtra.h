@@ -15,7 +15,7 @@ public:
     void print() const;
     D* test() const;
     D largest() const;
-    void add_extra(int value, K key); // add to extra from leftmost to key
+    void add_extra(double value, K key); // add to extra from leftmost to key
     void resetExtra();
     double sum_extras(K key) const;
 
@@ -164,7 +164,7 @@ D AVLTreeExtra<K, D>::largest() const
 }
 
 template <class K, class D>
-void AVLTreeExtra<K, D>::add_extra(int value, K key)
+void AVLTreeExtra<K, D>::add_extra(double value, K key)
 {
     if (this->m_root) {
         this->m_root->add_extra(value, key);

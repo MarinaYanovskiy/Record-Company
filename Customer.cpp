@@ -40,3 +40,7 @@ bool Customer::isMember() const
 {
     return m_is_member;
 }
+
+void Customer::setExpenses(int expense) {
+    m_monthly_expenses = expense;
+}

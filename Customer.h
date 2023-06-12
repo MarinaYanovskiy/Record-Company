@@ -21,9 +21,8 @@ public:
     void buyCD(int price);
     bool isMember() const;
     int getExpenses() const;
-
-
+    void setExpenses(int expense);
 };
 
 
-#endif //HASH_CUSTOMER_H
+#endif // HASH_CUSTOMER_H

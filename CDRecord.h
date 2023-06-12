@@ -18,7 +18,8 @@ public:
     void buyRecord();
     int getColumns() const;
     int getCopies() const;
+    int getPrice() const;
 };
 
 
-#endif //UNIONFIND_CDRECORD_H
+#endif // UNIONFIND_CDRECORD_H

@@ -11,22 +11,22 @@
 class UnionFind {
 private:
     int m_numOfRecords;
-    CDRecord * m_records;
-    nodeInGroup* * m_recordsMappedToGroups;
+    CDRecord* m_records;
+    nodeInGroup** m_recordsMappedToGroups;
     GroupList m_groups;
 
 
 public:
     UnionFind();
     ~UnionFind();
-    void reset(int *record_stocks, int number_of_records);
-    Group * Union(Group* source, Group* destination);
-    Group * Find(int record) const;
+    void reset(int* record_stocks, int number_of_records);
+    Group* Union(Group* source, Group* destination);
+    Group* Find(int record) const;
     nodeInGroup* MakeSet(CDRecord record);
-    CDRecord* getRecordInPlace(int n);
+    CDRecord* getRecordInPlace(int n) const;
     int getColumn(int record) const;
     int getHight(int record) const;
 };
 
 
-#endif //UNIONFIND_UNIONFIND_H
+#endif // UNIONFIND_UNIONFIND_H

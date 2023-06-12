@@ -29,3 +29,7 @@ int CDRecord::getColumns() const
 {
     return m_id;
 }
+
+int CDRecord::getPrice() const {
+        return 100 + m_purchases;
+}
