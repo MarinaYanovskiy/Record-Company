@@ -17,7 +17,7 @@ public:
     D largest() const;
     void add_extra(int value, K key); // add to extra from leftmost to key
     void resetExtra();
-    int sum_extras(K key) const;
+    double sum_extras(K key) const;
 
     class ReverseInorderIterator {
     public:
@@ -180,7 +180,7 @@ void AVLTreeExtra<K, D>::resetExtra()
 }
 
 template <class K, class D>
-int AVLTreeExtra<K, D>::sum_extras(K key) const
+double AVLTreeExtra<K, D>::sum_extras(K key) const
 {
     if (this->m_root) {
         return this->m_root->sum_extras(key);

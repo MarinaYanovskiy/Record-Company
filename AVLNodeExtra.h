@@ -16,10 +16,10 @@ public:
     ~NodeExtra();
     void insert(K key, D data);
     D find(K key) const;
-    int sum_extras(K key) const;
-    void add_extra(int value, K key); // add to extra from leftmost to key
+    double sum_extras(K key) const;
+    void add_extra(double value, K key); // add to extra from leftmost to key
     void resetExtra();
-    void setExtra(int val);
+    void setExtra(double val);
     void remove(K key);
     void print(std::string prefix, bool isLeft);
     bool isLeaf() const;
@@ -31,7 +31,7 @@ public:
 private:
     K m_key;
     D m_data;
-    int m_extra;
+    double m_extra;
     int m_height;
     NodeExtra* m_left;
     NodeExtra* m_right;
@@ -366,7 +366,7 @@ D NodeExtra<K, D>::largest() const
 }
 
 template <class K, class D>
-int NodeExtra<K, D>::sum_extras(K key) const
+double NodeExtra<K, D>::sum_extras(K key) const
 {
     if (this->m_key == key) {
         return this->m_extra;
@@ -390,7 +390,7 @@ int NodeExtra<K, D>::sum_extras(K key) const
 }
 
 template <class K, class D>
-void NodeExtra<K, D>::add_extra(int value, K key)
+void NodeExtra<K, D>::add_extra(double value, K key)
 {
     bool went_right = false;
     NodeExtra<K, D>* current = this;
@@ -457,7 +457,7 @@ void NodeExtra<K, D>::resetExtra()
 }
 
 template <class K, class D>
-void NodeExtra<K, D>::setExtra(int val)
+void NodeExtra<K, D>::setExtra(double val)
 {
     this->m_extra = val;
 }
