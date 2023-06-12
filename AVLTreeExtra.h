@@ -1,7 +1,7 @@
 #ifndef AVLTREE_EXTRA_H
 #define AVLTREE_EXTRA_H
 
-#include "AVLNode.h"
+#include "AVLNodeExtra.h"
 #include <iostream>
 
 template <class K, class D>
@@ -21,7 +21,7 @@ public:
 
     class ReverseInorderIterator {
     public:
-        ReverseInorderIterator(Node<K, D>* tree, int index)
+        ReverseInorderIterator(NodeExtra<K, D>* tree, int index)
             : m_size(0)
             , m_index(index)
         {
@@ -87,7 +87,7 @@ public:
     }
 
 private:
-    Node<K, D>* m_root;
+    NodeExtra<K, D>* m_root;
 };
 
 template <class K, class D>
@@ -109,13 +109,13 @@ template <class K, class D>
 void AVLTreeExtra<K, D>::insert(K key, D data)
 {
     if (this->m_root == nullptr) {
-        this->m_root = new Node<K, D>(key, data);
+        this->m_root = new NodeExtra<K, D>(key, data);
         return;
     }
 
     this->m_root->insert(key, data);
-    Node<K, D>* inserted = this->m_root->findNode(key);
-    int val = this->m_root->sum_extras(key);
+    NodeExtra<K, D>* inserted = this->m_root->findNodeExtra(key);
+    double val = this->m_root->sum_extras(key);
     inserted->setExtra(-val);
 }
 

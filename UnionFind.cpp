@@ -1,8 +1,8 @@
 #include "UnionFind.h"
 UnionFind::UnionFind()
-    : m_records(nullptr)
+    : m_numOfRecords(0)
+    , m_records(nullptr)
     , m_recordsMappedToGroups(nullptr)
-    , m_numOfRecords(0)
 {
 }
 

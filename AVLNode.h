@@ -3,11 +3,6 @@
 
 #include <iostream>
 
-inline int max(int a, int b)
-{
-    return a > b ? a : b;
-}
-
 template <class K, class D>
 class Node {
 public:
@@ -74,7 +69,7 @@ int Node<K, D>::rHeight() const
 template <class K, class D>
 void Node<K, D>::updateHeight()
 {
-    this->m_height = max(this->rHeight(), this->lHeight()) + 1;
+    this->m_height = this->rHeight() > this->lHeight() ? this->rHeight() + 1 : this->lHeight() + 1;
 }
 
 template <class K, class D>
@@ -332,7 +327,7 @@ D Node<K, D>::largest() const
     while (node->m_right != nullptr) {
         node = node->m_right;
     }
-    
+
     return node->m_data;
 }
 #endif

@@ -1,5 +1,13 @@
 #include "recordsCompany.h"
 
+RecordsCompany::RecordsCompany()
+{
+}
+
+RecordsCompany::~RecordsCompany()
+{
+}
+
 StatusType RecordsCompany::newMonth(int* records_stocks, int number_of_records)
 {
     if (number_of_records < 0) {
