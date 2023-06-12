@@ -1,9 +1,0 @@
-AlwaysBreakTemplateDeclarations: Yes
-IndentWidth: 4
-ColumnLimit: 120
-MaxEmptyLinesToKeep: 2
-AllowShortFunctionsOnASingleLine: false
-SpaceInEmptyBlock: false
-BasedOnStyle: WebKit
-BraceWrapping:
-  AfterControlStatement: Never
