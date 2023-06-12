@@ -1,14 +1,14 @@
-#ifndef AVLTREE_H
-#define AVLTREE_H
+#ifndef AVLTREE_EXTRA_H
+#define AVLTREE_EXTRA_H
 
 #include "AVLNode.h"
 #include <iostream>
 
 template <class K, class D>
-class AVLTree {
+class AVLTreeExtra {
 public:
-    AVLTree();
-    ~AVLTree();
+    AVLTreeExtra();
+    ~AVLTreeExtra();
     void insert(K key, D data);
     void remove(K key);
     D find(K key) const;
@@ -91,13 +91,13 @@ private:
 };
 
 template <class K, class D>
-AVLTree<K, D>::AVLTree()
+AVLTreeExtra<K, D>::AVLTreeExtra()
     : m_root(nullptr)
 {
 }
 
 template <class K, class D>
-AVLTree<K, D>::~AVLTree()
+AVLTreeExtra<K, D>::~AVLTreeExtra()
 {
     if (m_root != nullptr) {
         delete m_root;
@@ -106,7 +106,7 @@ AVLTree<K, D>::~AVLTree()
 }
 
 template <class K, class D>
-void AVLTree<K, D>::insert(K key, D data)
+void AVLTreeExtra<K, D>::insert(K key, D data)
 {
     if (this->m_root == nullptr) {
         this->m_root = new Node<K, D>(key, data);
@@ -120,7 +120,7 @@ void AVLTree<K, D>::insert(K key, D data)
 }
 
 template <class K, class D>
-void AVLTree<K, D>::remove(K key)
+void AVLTreeExtra<K, D>::remove(K key)
 {
     if (this->m_root == nullptr) {
         return;
@@ -136,7 +136,7 @@ void AVLTree<K, D>::remove(K key)
 }
 
 template <class K, class D>
-D AVLTree<K, D>::find(K key) const
+D AVLTreeExtra<K, D>::find(K key) const
 {
     if (this->m_root == nullptr) {
         return nullptr;
@@ -146,7 +146,7 @@ D AVLTree<K, D>::find(K key) const
 }
 
 template <class K, class D>
-void AVLTree<K, D>::print() const
+void AVLTreeExtra<K, D>::print() const
 {
     if (this->m_root != nullptr) {
         this->m_root->print("", false);
@@ -154,7 +154,7 @@ void AVLTree<K, D>::print() const
 }
 
 template <class K, class D>
-D AVLTree<K, D>::largest() const
+D AVLTreeExtra<K, D>::largest() const
 {
     if (this->m_root == nullptr) {
         return nullptr;
@@ -164,7 +164,7 @@ D AVLTree<K, D>::largest() const
 }
 
 template <class K, class D>
-void AVLTree<K, D>::add_extra(int value, K key)
+void AVLTreeExtra<K, D>::add_extra(int value, K key)
 {
     if (this->m_root) {
         this->m_root->add_extra(value, key);
@@ -172,7 +172,7 @@ void AVLTree<K, D>::add_extra(int value, K key)
 }
 
 template <class K, class D>
-void AVLTree<K, D>::resetExtra()
+void AVLTreeExtra<K, D>::resetExtra()
 {
     if (this->m_root) {
         this->m_root->resetExtra();
@@ -180,7 +180,7 @@ void AVLTree<K, D>::resetExtra()
 }
 
 template <class K, class D>
-int AVLTree<K, D>::sum_extras(K key) const
+int AVLTreeExtra<K, D>::sum_extras(K key) const
 {
     if (this->m_root) {
         return this->m_root->sum_extras(key);

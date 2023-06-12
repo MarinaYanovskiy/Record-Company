@@ -1,5 +1,5 @@
-#ifndef AVLNODE_H
-#define AVLNODE_H
+#ifndef AVLNODE_EXTRA_H
+#define AVLNODE_EXTRA_H
 
 #include <iostream>
 
@@ -9,11 +9,11 @@ inline int max(int a, int b)
 }
 
 template <class K, class D>
-class Node {
+class NodeExtra {
 public:
-    Node(K key, D data);
-    Node(Node<K, D>& other) = default;
-    ~Node();
+    NodeExtra(K key, D data);
+    NodeExtra(NodeExtra<K, D>& other) = default;
+    ~NodeExtra();
     void insert(K key, D data);
     D find(K key) const;
     int sum_extras(K key) const;
@@ -26,15 +26,15 @@ public:
     void inOrderArray(D* array, int index) const;
     int size() const;
     D largest() const;
-    Node<K, D>* findNode(K key);
+    NodeExtra<K, D>* findNodeExtra(K key);
 
 private:
     K m_key;
     D m_data;
     int m_extra;
     int m_height;
-    Node* m_left;
-    Node* m_right;
+    NodeExtra* m_left;
+    NodeExtra* m_right;
 
     int rHeight() const;
     int lHeight() const;
@@ -42,11 +42,11 @@ private:
     void lRotate();
     void updateHeight();
     void rebalance();
-    void remove(K key, Node<K, D>* parent);
+    void remove(K key, NodeExtra<K, D>* parent);
 };
 
 template <class K, class D>
-Node<K, D>::Node(K key, D data)
+NodeExtra<K, D>::NodeExtra(K key, D data)
     : m_key(key)
     , m_data(data)
     , m_extra(0)
@@ -57,7 +57,7 @@ Node<K, D>::Node(K key, D data)
 }
 
 template <class K, class D>
-Node<K, D>::~Node()
+NodeExtra<K, D>::~NodeExtra()
 {
     // delete this->m_data;
     delete this->m_right;
@@ -67,30 +67,30 @@ Node<K, D>::~Node()
 }
 
 template <class K, class D>
-int Node<K, D>::lHeight() const
+int NodeExtra<K, D>::lHeight() const
 {
     return this->m_left != nullptr ? this->m_left->m_height : 0;
 }
 
 template <class K, class D>
-int Node<K, D>::rHeight() const
+int NodeExtra<K, D>::rHeight() const
 {
     return this->m_right != nullptr ? this->m_right->m_height : 0;
 }
 
 template <class K, class D>
-void Node<K, D>::updateHeight()
+void NodeExtra<K, D>::updateHeight()
 {
     this->m_height = max(this->rHeight(), this->lHeight()) + 1;
 }
 
 template <class K, class D>
-void Node<K, D>::rebalance()
+void NodeExtra<K, D>::rebalance()
 {
     int balanceFactor = this->lHeight() - this->rHeight();
     if (balanceFactor == 2) {
         // rotate left
-        Node<K, D>* left = this->m_left; // cannot fail
+        NodeExtra<K, D>* left = this->m_left; // cannot fail
         if (left->lHeight() < left->rHeight()) {
             left->lRotate();
         }
@@ -100,7 +100,7 @@ void Node<K, D>::rebalance()
 
     if (balanceFactor == -2) {
         // rotate right
-        Node<K, D>* right = this->m_right; // cannot fail
+        NodeExtra<K, D>* right = this->m_right; // cannot fail
         if (right->lHeight() > right->rHeight()) {
             right->rRotate();
         }
@@ -112,16 +112,16 @@ void Node<K, D>::rebalance()
 }
 
 template <class K, class D>
-void Node<K, D>::rRotate()
+void NodeExtra<K, D>::rRotate()
 {
-    Node<K, D>* left = this->m_left;
+    NodeExtra<K, D>* left = this->m_left;
 
     left->m_extra += this->m_extra;
     this->m_extra = -this->m_extra;
 
     this->m_left = left->m_right;
     this->updateHeight();
-    left->m_right = new Node<K, D>(*this);
+    left->m_right = new NodeExtra<K, D>(*this);
     left->updateHeight();
     *this = *left;
 
@@ -136,16 +136,16 @@ void Node<K, D>::rRotate()
 }
 
 template <class K, class D>
-void Node<K, D>::lRotate()
+void NodeExtra<K, D>::lRotate()
 {
-    Node<K, D>* right = this->m_right;
+    NodeExtra<K, D>* right = this->m_right;
 
     right->m_extra += this->m_extra;
     this->m_extra = -this->m_extra;
 
     this->m_right = right->m_left;
     this->updateHeight();
-    right->m_left = new Node<K, D>(*this);
+    right->m_left = new NodeExtra<K, D>(*this);
     right->updateHeight();
     *this = *right;
 
@@ -162,7 +162,7 @@ void Node<K, D>::lRotate()
 
 
 template <class K, class D>
-void Node<K, D>::insert(K key, D data)
+void NodeExtra<K, D>::insert(K key, D data)
 {
     if (this->m_key == key) {
         return;
@@ -172,13 +172,13 @@ void Node<K, D>::insert(K key, D data)
         if (this->m_right) {
             this->m_right->insert(key, data);
         } else {
-            this->m_right = new Node<K, D>(key, data);
+            this->m_right = new NodeExtra<K, D>(key, data);
         }
     } else {
         if (this->m_left) {
             this->m_left->insert(key, data);
         } else {
-            this->m_left = new Node<K, D>(key, data);
+            this->m_left = new NodeExtra<K, D>(key, data);
         }
     }
 
@@ -187,7 +187,7 @@ void Node<K, D>::insert(K key, D data)
 }
 
 template <class K, class D>
-D Node<K, D>::find(K key) const
+D NodeExtra<K, D>::find(K key) const
 {
     if (this->m_key == key) {
         return this->m_data;
@@ -211,7 +211,7 @@ D Node<K, D>::find(K key) const
 }
 
 template <class K, class D>
-void Node<K, D>::remove(K key, Node<K, D>* parent)
+void NodeExtra<K, D>::remove(K key, NodeExtra<K, D>* parent)
 {
     if (key > this->m_key) {
         if (this->m_right == nullptr) {
@@ -245,7 +245,7 @@ void Node<K, D>::remove(K key, Node<K, D>* parent)
         }
 
         // update parent
-        Node<K, D>** parents_son = parent->m_right == this ? &parent->m_right : &parent->m_left;
+        NodeExtra<K, D>** parents_son = parent->m_right == this ? &parent->m_right : &parent->m_left;
         *parents_son = nullptr;
         parent->updateHeight();
         parent->rebalance();
@@ -255,7 +255,7 @@ void Node<K, D>::remove(K key, Node<K, D>* parent)
 
     // node has only one son
     if ((this->m_right == nullptr) ^ (this->m_left == nullptr)) {
-        Node<K, D>* son = this->m_right ? this->m_right : this->m_left;
+        NodeExtra<K, D>* son = this->m_right ? this->m_right : this->m_left;
         if (parent == nullptr) {
             // this == root
             *this = *son;
@@ -265,7 +265,7 @@ void Node<K, D>::remove(K key, Node<K, D>* parent)
             return;
         }
 
-        Node<K, D>** parents_son = parent->m_right == this ? &parent->m_right : &parent->m_left;
+        NodeExtra<K, D>** parents_son = parent->m_right == this ? &parent->m_right : &parent->m_left;
         // currently, parents_son points to this
         *parents_son = son;
         parent->updateHeight();
@@ -278,8 +278,8 @@ void Node<K, D>::remove(K key, Node<K, D>* parent)
 
     // otherwise (node has two sons)
 
-    Node<K, D>* next_inorder = this->m_right;
-    Node<K, D>* next_inorders_parent = this;
+    NodeExtra<K, D>* next_inorder = this->m_right;
+    NodeExtra<K, D>* next_inorders_parent = this;
     while (next_inorder->m_left != nullptr) {
         next_inorders_parent = next_inorder;
         next_inorder = next_inorder->m_left;
@@ -299,13 +299,13 @@ void Node<K, D>::remove(K key, Node<K, D>* parent)
 }
 
 template <class K, class D>
-void Node<K, D>::remove(K key)
+void NodeExtra<K, D>::remove(K key)
 {
     this->remove(key, nullptr);
 }
 
 template <class K, class D>
-void Node<K, D>::print(std::string prefix, bool isLeft)
+void NodeExtra<K, D>::print(std::string prefix, bool isLeft)
 {
     std::cout << prefix;
     std::cout << (isLeft ? "├──" : "└──");
@@ -319,13 +319,13 @@ void Node<K, D>::print(std::string prefix, bool isLeft)
 }
 
 template <class K, class D>
-bool Node<K, D>::isLeaf() const
+bool NodeExtra<K, D>::isLeaf() const
 {
     return this->m_height == 1;
 }
 
 template <class K, class D>
-int Node<K, D>::size() const
+int NodeExtra<K, D>::size() const
 {
     int size = 1;
     if (this->m_right) {
@@ -339,7 +339,7 @@ int Node<K, D>::size() const
 }
 
 template <class K, class D>
-void Node<K, D>::inOrderArray(D* array, int index) const
+void NodeExtra<K, D>::inOrderArray(D* array, int index) const
 {
     if (this->m_left) {
         this->m_left->inOrderArray(array, index);
@@ -355,7 +355,7 @@ void Node<K, D>::inOrderArray(D* array, int index) const
 }
 
 template <class K, class D>
-D Node<K, D>::largest() const
+D NodeExtra<K, D>::largest() const
 {
     auto node = this;
     while (node->m_right != nullptr) {
@@ -366,7 +366,7 @@ D Node<K, D>::largest() const
 }
 
 template <class K, class D>
-int Node<K, D>::sum_extras(K key) const
+int NodeExtra<K, D>::sum_extras(K key) const
 {
     if (this->m_key == key) {
         return this->m_extra;
@@ -390,10 +390,10 @@ int Node<K, D>::sum_extras(K key) const
 }
 
 template <class K, class D>
-void Node<K, D>::add_extra(int value, K key)
+void NodeExtra<K, D>::add_extra(int value, K key)
 {
     bool went_right = false;
-    Node<K, D>* current = this;
+    NodeExtra<K, D>* current = this;
     while (current->isLeaf() == false) {
         if (key == current->m_key) {
             if (went_right == false) {
@@ -444,7 +444,7 @@ void Node<K, D>::add_extra(int value, K key)
 }
 
 template <class K, class D>
-void Node<K, D>::resetExtra()
+void NodeExtra<K, D>::resetExtra()
 {
     this->m_extra = 0;
     if (this->m_right) {
@@ -457,13 +457,13 @@ void Node<K, D>::resetExtra()
 }
 
 template <class K, class D>
-void Node<K, D>::setExtra(int val)
+void NodeExtra<K, D>::setExtra(int val)
 {
     this->m_extra = val;
 }
 
 template <class K, class D>
-Node<K, D>* Node<K, D>::findNode(K key)
+NodeExtra<K, D>* NodeExtra<K, D>::findNodeExtra(K key)
 {
     if (this->m_key == key) {
         return this;
@@ -471,14 +471,14 @@ Node<K, D>* Node<K, D>::findNode(K key)
 
     if (key > this->m_key) {
         if (this->m_right) {
-            return this->m_right->findNode(key);
+            return this->m_right->findNodeExtra(key);
         }
         return nullptr;
     }
 
     if (key < this->m_key) {
         if (this->m_left) {
-            return this->m_left->findNode(key);
+            return this->m_left->findNodeExtra(key);
         }
         return nullptr;
     }
