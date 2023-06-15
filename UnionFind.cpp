@@ -8,11 +8,14 @@ UnionFind::UnionFind()
 
 UnionFind::~UnionFind()
 {
-    for (int i = 1; i < m_numOfRecords; i++) {
+    for (int i = 0; i < m_numOfRecords; i++) {
         delete m_recordsMappedToGroups[i];
     }
-    delete[] m_recordsMappedToGroups;
-    delete[] m_records;
+    if (m_numOfRecords > 0) {
+        delete[] m_recordsMappedToGroups;
+        delete[] m_records;
+     //   m_groups.deleteList();
+    }
 }
 
 void UnionFind::reset(int* record_stocks, int number_of_records)
@@ -29,7 +32,7 @@ void UnionFind::reset(int* record_stocks, int number_of_records)
     m_recordsMappedToGroups = new nodeInGroup*[number_of_records];
     m_records = new CDRecord[number_of_records];
     m_numOfRecords = number_of_records;
-    for (int i = 0; i < number_of_records; ++i) {
+    for (int i = 0; i < number_of_records; i++) {
         m_records[i] = CDRecord(i, record_stocks[i]);
         m_recordsMappedToGroups[i] = MakeSet(m_records[i]);
     }
@@ -86,9 +89,12 @@ int UnionFind::getHight(int record) const
 
 Group* UnionFind::Union(Group* source, Group* destination)
 {
-    destination->merge(source);
-    m_groups.remove(source);
-    return destination;
+    if(destination->merge(source)!= nullptr)
+    {
+        m_groups.remove(source);
+        return destination;
+    }
+    return nullptr;
 }
 
 

@@ -113,10 +113,7 @@ void AVLTreeExtra<K, D>::insert(K key, D data)
         return;
     }
 
-    this->m_root->insert(key, data);
-    NodeExtra<K, D>* inserted = this->m_root->findNodeExtra(key);
-    double val = this->m_root->sum_extras(key);
-    inserted->setExtra(-val);
+    this->m_root->insert(key, data,m_root);
 }
 
 template <class K, class D>

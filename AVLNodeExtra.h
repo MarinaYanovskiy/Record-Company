@@ -14,7 +14,7 @@ public:
     NodeExtra(K key, D data);
     NodeExtra(NodeExtra<K, D>& other) = default;
     ~NodeExtra();
-    void insert(K key, D data);
+    void insert(K key, D data, NodeExtra<K,D>* root);
     D find(K key) const;
     double sum_extras(K key) const;
     void add_extra(double value, K key); // add to extra from leftmost to key
@@ -115,9 +115,15 @@ template <class K, class D>
 void NodeExtra<K, D>::rRotate()
 {
     NodeExtra<K, D>* left = this->m_left;
-
-    left->m_extra += this->m_extra;
-    this->m_extra = -this->m_extra;
+    int oldA, oldB;
+    oldA=this->m_extra;
+    oldB=left->m_extra;
+    this->m_extra=-oldB;
+    left->m_extra=oldB+oldA;
+    if(left->m_right!= nullptr)
+    {
+        left->m_right->m_extra+=oldB;
+    }
 
     this->m_left = left->m_right;
     this->updateHeight();
@@ -140,8 +146,15 @@ void NodeExtra<K, D>::lRotate()
 {
     NodeExtra<K, D>* right = this->m_right;
 
-    right->m_extra += this->m_extra;
-    this->m_extra = -this->m_extra;
+    int oldA, oldB;
+    oldA=this->m_extra;
+    oldB=right->m_extra;
+    this->m_extra=-oldB;
+    right->m_extra=oldB+oldA;
+    if(right->m_left!= nullptr)
+    {
+        right->m_left->m_extra+=oldB;
+    }
 
     this->m_right = right->m_left;
     this->updateHeight();
@@ -162,7 +175,7 @@ void NodeExtra<K, D>::lRotate()
 
 
 template <class K, class D>
-void NodeExtra<K, D>::insert(K key, D data)
+void NodeExtra<K, D>::insert(K key, D data, NodeExtra<K,D>* root)
 {
     if (this->m_key == key) {
         return;
@@ -170,15 +183,17 @@ void NodeExtra<K, D>::insert(K key, D data)
 
     if (key > this->m_key) {
         if (this->m_right) {
-            this->m_right->insert(key, data);
+            this->m_right->insert(key, data,root);
         } else {
             this->m_right = new NodeExtra<K, D>(key, data);
+            this->m_right->m_extra=-root->sum_extras(key);
         }
     } else {
         if (this->m_left) {
-            this->m_left->insert(key, data);
+            this->m_left->insert(key, data,root);
         } else {
             this->m_left = new NodeExtra<K, D>(key, data);
+            this->m_left->m_extra=-root->sum_extras(key);
         }
     }
 
@@ -439,6 +454,11 @@ void NodeExtra<K, D>::add_extra(double value, K key)
     if (current->isLeaf() && went_right == false) {
         if (key >= current->m_key) {
             current->m_extra += value;
+        }
+    }
+    if (current->isLeaf() && went_right == true) {
+        if (key < current->m_key) {
+            current->m_extra -= value;
         }
     }
 }

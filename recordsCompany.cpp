@@ -19,6 +19,7 @@ StatusType RecordsCompany::newMonth(int* records_stocks, int number_of_records)
         for (auto member : m_clubMembers) {
             member->setExpenses(0);
         }
+        m_clubMembers.resetExtra();
 
         return StatusType::SUCCESS;
     } catch (std::bad_alloc&) {
@@ -115,9 +116,8 @@ StatusType RecordsCompany::buyRecord(int c_id, int r_id)
     }
 
     if (member->isMember()) {
-        member->setExpenses(record->getPrice());
+        member->buyCD(record->getPrice());
     }
-
     record->buyRecord();
     return StatusType::SUCCESS;
 }
@@ -141,7 +141,7 @@ Output_t<double> RecordsCompany::getExpenses(int c_id)
     }
 
     auto customer = m_customers.find(c_id);
-    if (customer == nullptr) {
+    if (customer == nullptr || !customer->isMember()) {
         return StatusType::DOESNT_EXISTS;
     }
 

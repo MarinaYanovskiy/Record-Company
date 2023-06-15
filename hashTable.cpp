@@ -1,19 +1,4 @@
 #include "hashTable.h"
-/*
-private:
-int m_numOfObjects;
-int m_tableSize;
-int (*m_hashFunc)(int);
-AVLTree<int, std::shared_ptr<Customer> >* m_hashTableWithTrees;
-
-void enlargeTable();
-
-public:
-hashTable();
-~hashTable();
-void insert(int key, std::shared_ptr<Customer>);
-std::shared_ptr<Customer> find(int key);
-*/
 
 hashTable::hashTable():
 m_numOfObjects(0),
@@ -39,7 +24,8 @@ void hashTable::insert(int key, std::shared_ptr<Customer> customer)
 std::shared_ptr<Customer> hashTable::find(int key) const
 {
     int placeInTable = m_hashFunc(key);
-    return m_hashTableWithTrees[placeInTable].find(key);
+    std::shared_ptr<Customer> c= m_hashTableWithTrees[placeInTable].find(key);
+    return c;
 }
 
 void hashTable::enlargeTable()

@@ -59,4 +59,5 @@ void GroupList::deleteList()
         delete temp;
     }
     delete m_root;
+    m_root= nullptr;
 }
