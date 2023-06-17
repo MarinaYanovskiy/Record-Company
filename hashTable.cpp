@@ -17,7 +17,7 @@ void hashTable::insert(int key, std::shared_ptr<Customer> customer)
     int placeInTable = m_hashFunc(key);
     m_hashTableWithTrees[placeInTable].insert(key, customer);
     m_numOfObjects++;
-    if(m_numOfObjects == m_tableSize)
+    if(m_numOfObjects == m_tableSize * INCREMENT_FACTOR)
         enlargeTable();
 }
 
